@@ -2383,6 +2383,16 @@ namespace GitUI
 
         private void EditCommitToolStripMenuItemClick(object sender, EventArgs e)
         {
+            launchRebase("e");
+        }
+
+        private void RewordCommitToolStripMenuItemClick(object sender, EventArgs e)
+        {
+            launchRebase("r");
+        }
+
+        private void launchRebase(string command)
+        {
             if (ShouldStartDialog())
                 return;
 
@@ -2393,7 +2403,7 @@ namespace GitUI
                 true /* shouldStash */);
 
             Dictionary<string, string> envVariables = new Dictionary<string, string>();
-            envVariables.Add("GIT_SEQUENCE_EDITOR", "sed -i -re '0,/pick/s//e/'");
+            envVariables.Add("GIT_SEQUENCE_EDITOR", String.Format("sed -i -re '0,/pick/s//{0}/'", command));
             FormProcess.ReadDialog(this, null, rebaseCmd, envVariables, this.Module, null, true);
         }
 
